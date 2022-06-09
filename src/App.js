@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Form from './Components/Form';
 import TodoList from './Components/TodoList';
 import initialTodos from './todos.json';
 import './App.css';
@@ -14,6 +15,13 @@ class App extends Component {
     }));
   };
 
+  /**data - {name, tag} из стейта формы */
+  formSubmitHandler = data => {
+    setTimeout(() => {
+      console.log(data);
+    }, 1000);
+  };
+
   render() {
     // вычисляемые значения
     const { todos } = this.state;
@@ -27,6 +35,9 @@ class App extends Component {
     return (
       <div className="Container">
         <h1>Todo List</h1>
+        {/*onSubmitForm это не прослушиватель события, это проп который идет на мой компонент формы */}
+        <Form onSubmitForm={this.formSubmitHandler} />
+        {/* <Form onSubmitForm={this.formSubmitHandler} /> */}
         <p>Total Todo: {totalTodoCount}</p>
         <p>Number of completed Todo: {completedTodoCount}</p>
         <TodoList todos={todos} onDeleteTodo={this.deleteTodo} />
