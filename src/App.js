@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
+import Container from './Components/Container/Container';
 import Form from './Components/Form';
 import TodoList from './Components/TodoList';
 import initialTodos from './todos.json';
-import './App.css';
+// import './App.css';
 
 class App extends Component {
   state = {
     todos: initialTodos,
+  };
+
+  /**data - {name, tag} из стейта формы */
+  formSubmitHandler = data => {
+    setTimeout(() => {
+      console.log(data);
+    }, 500);
   };
 
   deleteTodo = todoId => {
@@ -15,33 +23,53 @@ class App extends Component {
     }));
   };
 
-  /**data - {name, tag} из стейта формы */
-  formSubmitHandler = data => {
-    setTimeout(() => {
-      console.log(data);
-    }, 1000);
+  toggleComplited = todoId => {
+    // console.log(todoId);
+
+    // this.setState(prevState => ({
+    //  todos: prevState.todos.map(todo => {
+    //     if (todo.id === todoId) {
+    //       return {
+    //         ...todo,
+    //         complited: !todo.complited,
+    //       };
+    //     }
+    //     return todo;
+    //   }),
+    // }));
+
+    this.setState(({ todos }) => ({
+      todos: todos.map(todo =>
+        todo.id === todoId ? { ...todo, complited: !todo.complited } : todo,
+      ),
+    }));
   };
 
   render() {
-    // вычисляемые значения
     const { todos } = this.state;
-
     const totalTodoCount = todos.length;
+    // вычисляемые значения
     const completedTodoCount = todos.reduce(
       (acc, todo) => (todo.complited ? acc + 1 : acc),
       0,
     );
 
     return (
-      <div className="Container">
+      <Container>
         <h1>Todo List</h1>
         {/*onSubmitForm это не прослушиватель события, это проп который идет на мой компонент формы */}
         <Form onSubmitForm={this.formSubmitHandler} />
         {/* <Form onSubmitForm={this.formSubmitHandler} /> */}
-        <p>Total Todo: {totalTodoCount}</p>
-        <p>Number of completed Todo: {completedTodoCount}</p>
-        <TodoList todos={todos} onDeleteTodo={this.deleteTodo} />
-      </div>
+        <div>
+          <p>Total Todo: {totalTodoCount}</p>
+          <p>Number of completed Todo: {completedTodoCount}</p>
+        </div>
+        <TodoList
+          todos={todos}
+          onToggleCompleted={this.toggleComplited}
+          onDeleteTodo={this.deleteTodo}
+        />
+      </Container>
     );
   }
 }
