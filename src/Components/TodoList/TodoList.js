@@ -8,7 +8,7 @@ const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => (
       <li
         key={id}
         className={classNames('TodoList__item', {
-          'TodoList__item--complited': complited,
+          'TodoList__item--completed': complited,
         })}
       >
         <input
