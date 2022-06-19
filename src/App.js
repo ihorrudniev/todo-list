@@ -1,18 +1,43 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 import Container from './Components/Container/Container';
+import Modal from './Components/Modal';
 // import Form from './Components/Form';
-import TodoEditor from './Components/TodoEditor';
-import Filter from './Components/Filter/Filter';
-import TodoList from './Components/TodoList';
-import initialTodos from './todos.json';
+// import TodoEditor from './Components/TodoEditor';
+// import Filter from './Components/Filter/Filter';
+// import TodoList from './Components/TodoList';
+// import initialTodos from './todos.json';
 // import './App.css';
 
 class App extends Component {
   state = {
-    todos: initialTodos,
+    todos: [],
     filter: '',
+    showModal: false,
   };
+
+  // Монтирование компонента первый раз не публичное свойство класса
+  componentDidMount() {
+    // console.log('App componentDidMount');
+
+    const todos = localStorage.getItem('todos');
+    const parceTodos = JSON.parse(todos);
+
+    if (parceTodos) {
+      this.setState({ todos: parceTodos });
+    }
+  }
+
+  // обновление компонента кадый раз при получении пропса или изменении стейта
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('App componentDidUpdate ');
+    if (this.state.todos !== prevState.todos) {
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+
+    // console.log(prevState);
+    // console.log(this.state);
+  }
 
   addTodo = text => {
     const todo = {
@@ -28,7 +53,7 @@ class App extends Component {
     // console.log(text);
   };
 
-  // =====data - {name, tag} из стейта формы ======
+  // data - {name, tag} из стейта формы
   formSubmitHandler = data => {
     setTimeout(() => {
       console.log(data);
@@ -41,7 +66,7 @@ class App extends Component {
     }));
   };
 
-  // =====method update Todo on click checkbox=====
+  // method update Todo on click checkbox
   toggleComplited = todoId => {
     this.setState(({ todos }) => ({
       todos: todos.map(todo =>
@@ -82,8 +107,16 @@ class App extends Component {
     return todos.reduce((acc, todo) => (todo.complited ? acc + 1 : acc), 0);
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
-    const { todos, filter } = this.state;
+    // console.log('App render');
+
+    const { todos, filter, showModal } = this.state;
     const totalTodoCount = todos.length;
 
     const completedTodoCount = this.calculateCompletedTodoCount();
@@ -91,11 +124,28 @@ class App extends Component {
 
     return (
       <Container>
+        <button type="button" onClick={this.toggleModal}>
+          Open modal
+        </button>
+        {showModal && (
+          <Modal onCloseModal={this.toggleModal}>
+            <h1>Modal text</h1>
+            <p>
+              Commodo irure qui eu ex ipsum reprehenderit quis sunt sint
+              occaecat dolor amet sunt. Esse sunt elit adipisicing adipisicing
+              sunt tempor est anim aliquip.
+            </p>
+            <button type="button" onClick={this.toggleModal}>
+              Close modal
+            </button>
+          </Modal>
+        )}
+
+        {/* onSubmitForm это не прослушиватель события, это проп который идет на мой компонент формы */}
+        {/* <Form onSubmitForm={this.formSubmitHandler} />
+        <Form onSubmitForm={this.formSubmitHandler} /> */}
+        {/* <div>
         <h1>Todo List</h1>
-        {/*onSubmitForm это не прослушиватель события, это проп который идет на мой компонент формы */}
-        {/* <Form onSubmitForm={this.formSubmitHandler} /> */}
-        {/* <Form onSubmitForm={this.formSubmitHandler} /> */}
-        <div>
           <TodoEditor onSubmit={this.addTodo} />
           <p>Total Todo: {totalTodoCount}</p>
           <p>Number of completed Todo: {completedTodoCount}</p>
@@ -107,7 +157,7 @@ class App extends Component {
           todos={visibleTodos}
           onToggleCompleted={this.toggleComplited}
           onDeleteTodo={this.deleteTodo}
-        />
+        /> */}
       </Container>
     );
   }
