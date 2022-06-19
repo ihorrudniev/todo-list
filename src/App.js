@@ -128,7 +128,7 @@ class App extends Component {
           Open modal
         </button>
         {showModal && (
-          <Modal onCloseModal={this.toggleModal}>
+          <Modal onClose={this.toggleModal}>
             <h1>Modal text</h1>
             <p>
               Commodo irure qui eu ex ipsum reprehenderit quis sunt sint
@@ -145,7 +145,7 @@ class App extends Component {
         {/* <Form onSubmitForm={this.formSubmitHandler} />
         <Form onSubmitForm={this.formSubmitHandler} /> */}
         {/* <div>
-        <h1>Todo List</h1>
+          <h1>Todo List</h1>
           <TodoEditor onSubmit={this.addTodo} />
           <p>Total Todo: {totalTodoCount}</p>
           <p>Number of completed Todo: {completedTodoCount}</p>
