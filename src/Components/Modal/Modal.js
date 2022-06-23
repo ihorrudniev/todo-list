@@ -20,17 +20,20 @@ class Modal extends Component {
   handleKeyDown = e => {
     console.log(e.code);
     if (e.code === 'Escape') {
-      console.log('Нажали ESC, нужно закрыть модалку');
+      // console.log('Нажали ESC, нужно закрыть модалку');
 
       this.props.onClose();
     }
   };
 
   handleBackdropClick = e => {
-    console.log('Кликнули в бекдроп');
+    // console.log('Кликнули в бекдроп');
+    // console.log('currentTarget', e.currentTarget);
+    // console.log('target', e.target);
 
-    console.log('currentTarget', e.currentTarget);
-    console.log('target', e.target);
+    if (e.currentTarget === e.target) {
+      this.props.onClose();
+    }
   };
 
   componentDidUpdate() {
